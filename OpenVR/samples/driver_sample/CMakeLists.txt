@@ -23,6 +23,7 @@ SET_TARGET_PROPERTIES(${TARGET_NAME} PROPERTIES PREFIX "")
 target_link_libraries(${TARGET_NAME}
   ${OPENVR_LIBRARIES}
   ${CMAKE_DL_LIBS}
+  -lsfml-window
 )
 
 if (CMAKE_SYSTEM_NAME STREQUAL "Windows")

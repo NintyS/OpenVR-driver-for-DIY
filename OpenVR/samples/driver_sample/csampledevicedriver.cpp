@@ -4,6 +4,9 @@
 
 #include <math.h>
 
+#include <SFML/Window/Keyboard.hpp>
+#include "driverlog.h"
+
 using namespace vr;
 
 //Head tracking vars
@@ -96,14 +99,14 @@ EVRInitError CSampleDeviceDriver::Activate(TrackedDeviceIndex_t unObjectId)
     if (!bSetupIconUsingExternalResourceFile) {
         // Setup properties directly in code.
         // Path values are of the form {drivername}\icons\some_icon_filename.png
-        vr::VRProperties()->SetStringProperty(m_ulPropertyContainer, vr::Prop_NamedIconPathDeviceOff_String, "{null}/icons/headset_sample_status_off.png");
-        vr::VRProperties()->SetStringProperty(m_ulPropertyContainer, vr::Prop_NamedIconPathDeviceSearching_String, "{null}/icons/headset_sample_status_searching.gif");
-        vr::VRProperties()->SetStringProperty(m_ulPropertyContainer, vr::Prop_NamedIconPathDeviceSearchingAlert_String, "{null}/icons/headset_sample_status_searching_alert.gif");
-        vr::VRProperties()->SetStringProperty(m_ulPropertyContainer, vr::Prop_NamedIconPathDeviceReady_String, "{null}/icons/headset_sample_status_ready.png");
-        vr::VRProperties()->SetStringProperty(m_ulPropertyContainer, vr::Prop_NamedIconPathDeviceReadyAlert_String, "{null}/icons/headset_sample_status_ready_alert.png");
-        vr::VRProperties()->SetStringProperty(m_ulPropertyContainer, vr::Prop_NamedIconPathDeviceNotReady_String, "{null}/icons/headset_sample_status_error.png");
-        vr::VRProperties()->SetStringProperty(m_ulPropertyContainer, vr::Prop_NamedIconPathDeviceStandby_String, "{null}/icons/headset_sample_status_standby.png");
-        vr::VRProperties()->SetStringProperty(m_ulPropertyContainer, vr::Prop_NamedIconPathDeviceAlertLow_String, "{null}/icons/headset_sample_status_ready_low.png");
+        vr::VRProperties()->SetStringProperty(m_ulPropertyContainer, vr::Prop_NamedIconPathDeviceOff_String, "{sample}/icons/quest_headset_off@2x.png");
+        vr::VRProperties()->SetStringProperty(m_ulPropertyContainer, vr::Prop_NamedIconPathDeviceSearching_String, "{sample}/icons/quest_headset_searching@2x.b4bfb144.gif");
+        vr::VRProperties()->SetStringProperty(m_ulPropertyContainer, vr::Prop_NamedIconPathDeviceSearchingAlert_String, "{sample}/icons/quest_headset_alert_searching@2x.b4bfb144.gif");
+        vr::VRProperties()->SetStringProperty(m_ulPropertyContainer, vr::Prop_NamedIconPathDeviceReady_String, "{sample}/icons/quest_headset_ready@2x.b4bfb144.png");
+        vr::VRProperties()->SetStringProperty(m_ulPropertyContainer, vr::Prop_NamedIconPathDeviceReadyAlert_String, "{sample}/icons/quest_headset_ready_alert@2x.b4bfb144.png");
+        vr::VRProperties()->SetStringProperty(m_ulPropertyContainer, vr::Prop_NamedIconPathDeviceNotReady_String, "{sample}/icons/quest_headset_error.b4bfb144.png");
+        vr::VRProperties()->SetStringProperty(m_ulPropertyContainer, vr::Prop_NamedIconPathDeviceStandby_String, "{sample}/icons/quest_headset_standby@2x.b4bfb144.png");
+        vr::VRProperties()->SetStringProperty(m_ulPropertyContainer, vr::Prop_NamedIconPathDeviceAlertLow_String, "{sample}/icons/headset_sample_status_ready_low.png");
     }
 
     return VRInitError_None;
@@ -196,7 +199,7 @@ DistortionCoordinates_t CSampleDeviceDriver::ComputeDistortion(EVREye eEye, floa
     return coordinates;
 }
 
-vr::DriverPose_t CSampleDeviceDriver::GetPose()
+vr::DriverPose_t CSampleDeviceDriver::GetPose() // This function sets postion of controlers, headsets and other shit
 {
     vr::DriverPose_t pose = { 0 };
     pose.poseIsValid = true;
@@ -207,55 +210,59 @@ vr::DriverPose_t CSampleDeviceDriver::GetPose()
     pose.qDriverFromHeadRotation = HmdQuaternion_Init(1, 0, 0, 0);
 
     //Simple change yaw, pitch, roll with numpad keys
-    if ((GetAsyncKeyState(VK_NUMPAD3) & 0x8000) != 0) {
+    if ((GetAsyncKeyState(VK_UP) & 0x8000) != 0) {
         yaw += 0.01;
     }
-    if ((GetAsyncKeyState(VK_NUMPAD1) & 0x8000) != 0) {
-        yaw += -0.01;
-    }
+    // if ((GetAsyncKeyState(VK_NUMPAD1) & 0x8000) != 0) {
+    //     yaw += -0.01;
+    // }
 
     if ((GetAsyncKeyState(VK_NUMPAD4) & 0x8000) != 0) {
         pitch += 0.01;
     }
-    if ((GetAsyncKeyState(VK_NUMPAD6) & 0x8000) != 0) {
-        pitch += -0.01;
-    }
+    // if ((GetAsyncKeyState(VK_NUMPAD6) & 0x8000) != 0) {
+    //     pitch += -0.01;
+    // }
 
     if ((GetAsyncKeyState(VK_NUMPAD8) & 0x8000) != 0) {
         roll += 0.01;
     }
-    if ((GetAsyncKeyState(VK_NUMPAD2) & 0x8000) != 0) {
-        roll += -0.01;
-    }
+    // if ((GetAsyncKeyState(VK_NUMPAD2) & 0x8000) != 0) {
+    //     roll += -0.01;
+    // }
 
-    if ((GetAsyncKeyState(VK_NUMPAD9) & 0x8000) != 0) {
-        yaw = 0;
-        pitch = 0;
-        roll = 0;
-    }
+    // if ((GetAsyncKeyState(VK_NUMPAD9) & 0x8000) != 0) {
+    //     yaw = 0;
+    //     pitch = 0;
+    //     roll = 0;
+    // }
 
-    if ((GetAsyncKeyState(VK_UP) & 0x8000) != 0) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+       DriverLog("W");
         pZ += -0.01;
     }
-    if ((GetAsyncKeyState(VK_DOWN) & 0x8000) != 0) {
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
         pZ += 0.01;
     }
 
-    if ((GetAsyncKeyState(VK_LEFT) & 0x8000) != 0) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
         pX += -0.01;
     }
-    if ((GetAsyncKeyState(VK_RIGHT) & 0x8000) != 0) {
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
         pX += 0.01;
     }
 
-    if ((GetAsyncKeyState(VK_PRIOR) & 0x8000) != 0) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
         pY += 0.01;
     }
-    if ((GetAsyncKeyState(VK_NEXT) & 0x8000) != 0) {
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)) {
         pY += -0.01;
     }
 
-    if ((GetAsyncKeyState(VK_END) & 0x8000) != 0) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z)) {
         pX = 0;
         pY = 0;
         pZ = 0;

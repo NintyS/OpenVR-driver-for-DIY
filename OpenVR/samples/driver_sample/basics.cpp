@@ -1,4 +1,5 @@
 #include "basics.h"
+#include "driverlog.h"
 
 // keys for use with the settings API
 const char *const k_pch_Sample_Section = "driver_null";
@@ -19,7 +20,7 @@ bool g_bExiting = false;
 
 int GetAsyncKeyState(int key)
 {
-    // TODO implement
+    DriverLog("Klawisz");
     return 0;
 }
 

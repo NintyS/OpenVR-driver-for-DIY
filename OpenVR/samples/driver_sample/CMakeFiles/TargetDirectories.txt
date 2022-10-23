@@ -1,0 +1,7 @@
+/home/nintyswinty/Documents/openvr-driver-for-diy/OpenVR/samples/driver_sample/CMakeFiles/driver_sample.dir
+/home/nintyswinty/Documents/openvr-driver-for-diy/OpenVR/samples/driver_sample/CMakeFiles/edit_cache.dir
+/home/nintyswinty/Documents/openvr-driver-for-diy/OpenVR/samples/driver_sample/CMakeFiles/rebuild_cache.dir
+/home/nintyswinty/Documents/openvr-driver-for-diy/OpenVR/samples/driver_sample/CMakeFiles/list_install_components.dir
+/home/nintyswinty/Documents/openvr-driver-for-diy/OpenVR/samples/driver_sample/CMakeFiles/install.dir
+/home/nintyswinty/Documents/openvr-driver-for-diy/OpenVR/samples/driver_sample/CMakeFiles/install/local.dir
+/home/nintyswinty/Documents/openvr-driver-for-diy/OpenVR/samples/driver_sample/CMakeFiles/install/strip.dir
