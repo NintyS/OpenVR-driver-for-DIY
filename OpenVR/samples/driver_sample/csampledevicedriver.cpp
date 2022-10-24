@@ -237,36 +237,36 @@ vr::DriverPose_t CSampleDeviceDriver::GetPose() // This function sets postion of
     //     roll = 0;
     // }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-       DriverLog("W");
-        pZ += -0.01;
-    }
+    // if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+    //    DriverLog("W");
+    //     pZ += -0.01;
+    // }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-        pZ += 0.01;
-    }
+    // if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+    //     pZ += 0.01;
+    // }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-        pX += -0.01;
-    }
+    // if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+    //     pX += -0.01;
+    // }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-        pX += 0.01;
-    }
+    // if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+    //     pX += 0.01;
+    // }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
-        pY += 0.01;
-    }
+    // if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
+    //     pY += 0.01;
+    // }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)) {
-        pY += -0.01;
-    }
+    // if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)) {
+    //     pY += -0.01;
+    // }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z)) {
-        pX = 0;
-        pY = 0;
-        pZ = 0;
-    }
+    // if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z)) {
+    //     pX = 0;
+    //     pY = 0;
+    //     pZ = 0;
+    // }
 
     pose.vecPosition[0] = pX;
     pose.vecPosition[1] = pY;
