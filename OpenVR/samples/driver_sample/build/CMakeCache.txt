@@ -228,7 +228,7 @@ Project_IS_TOP_LEVEL:STATIC=ON
 Project_SOURCE_DIR:STATIC=/home/nintyswinty/Documents/openvr-driver-for-diy/OpenVR/samples/driver_sample
 
 //Dependencies for the target
-driver_sample_LIB_DEPENDS:STATIC=general;dl;general;-lsfml-window;
+driver_sample_LIB_DEPENDS:STATIC=general;dl;general;-lsfml-network;
 
 
 ########################

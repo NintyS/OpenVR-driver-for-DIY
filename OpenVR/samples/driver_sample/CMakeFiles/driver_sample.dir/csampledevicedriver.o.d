@@ -158,6 +158,4 @@ CMakeFiles/driver_sample.dir/csampledevicedriver.o: \
  /usr/include/c++/11/tr1/poly_hermite.tcc \
  /usr/include/c++/11/tr1/poly_laguerre.tcc \
  /usr/include/c++/11/tr1/riemann_zeta.tcc \
- /usr/include/SFML/Window/Keyboard.hpp \
- /usr/include/SFML/Window/Export.hpp /usr/include/SFML/Config.hpp \
  /home/nintyswinty/Documents/openvr-driver-for-diy/OpenVR/samples/driver_sample/driverlog.h

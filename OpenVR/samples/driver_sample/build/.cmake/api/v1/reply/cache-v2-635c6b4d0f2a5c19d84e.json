@@ -1199,7 +1199,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "general;dl;general;-lsfml-window;"
+			"value" : "general;dl;general;-lsfml-network;"
 		}
 	],
 	"kind" : "cache",

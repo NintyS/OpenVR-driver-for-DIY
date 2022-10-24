@@ -16,6 +16,7 @@ add_library(${TARGET_NAME} MODULE
   csamplecontrollerdriver.h
   cwatchdogdriver_sample.cpp
   cwatchdogdriver_sample.h
+  udpserver.h
 )
 
 SET_TARGET_PROPERTIES(${TARGET_NAME} PROPERTIES PREFIX "")
@@ -23,7 +24,7 @@ SET_TARGET_PROPERTIES(${TARGET_NAME} PROPERTIES PREFIX "")
 target_link_libraries(${TARGET_NAME}
   ${OPENVR_LIBRARIES}
   ${CMAKE_DL_LIBS}
-  -lsfml-window
+  -lsfml-network
 )
 
 if (CMAKE_SYSTEM_NAME STREQUAL "Windows")

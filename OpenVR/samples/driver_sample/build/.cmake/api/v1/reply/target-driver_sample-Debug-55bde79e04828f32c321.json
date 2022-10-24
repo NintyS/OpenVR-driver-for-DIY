@@ -33,13 +33,13 @@
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 41,
+				"line" : 42,
 				"parent" : 0
 			},
 			{
 				"command" : 2,
 				"file" : 0,
-				"line" : 23,
+				"line" : 24,
 				"parent" : 0
 			},
 			{
@@ -115,7 +115,7 @@
 			},
 			{
 				"backtrace" : 3,
-				"fragment" : "-lsfml-window",
+				"fragment" : "-lsfml-network",
 				"role" : "libraries"
 			}
 		],
@@ -152,7 +152,8 @@
 				6,
 				8,
 				10,
-				12
+				12,
+				13
 			]
 		}
 	],
@@ -228,6 +229,11 @@
 		{
 			"backtrace" : 1,
 			"path" : "cwatchdogdriver_sample.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "udpserver.h",
 			"sourceGroupIndex" : 1
 		}
 	],

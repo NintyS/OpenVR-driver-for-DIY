@@ -7,6 +7,13 @@ EVRInitError CServerDriver_Sample::Init(vr::IVRDriverContext *pDriverContext)
     VR_INIT_SERVER_DRIVER_CONTEXT(pDriverContext);
     //InitDriverLog( vr::VRDriverLog() );
 
+    // Creating a new server
+    m_pServer = new UpdServer();
+
+    // Starting a new thread for the server
+    m_pThread = new std::thread(&UpdServer::run, m_pServer);
+    m_pThread->detach(); // Detaching the thread
+
     m_pNullHmdLatest = new CSampleDeviceDriver();
     vr::VRServerDriverHost()->TrackedDeviceAdded(m_pNullHmdLatest->GetSerialNumber().c_str(), vr::TrackedDeviceClass_HMD, m_pNullHmdLatest);
 
@@ -23,6 +30,13 @@ EVRInitError CServerDriver_Sample::Init(vr::IVRDriverContext *pDriverContext)
 
 void CServerDriver_Sample::Cleanup()
 {
+    // Clearing a memory after the server
+    delete m_pServer;
+    m_pServer = nullptr;
+    // Cleating after thread
+    delete m_pThread;
+    m_pThread = nullptr;
+
     //CleanupDriverLog();
     delete m_pNullHmdLatest;
     m_pNullHmdLatest = NULL;

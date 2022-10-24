@@ -20,7 +20,7 @@ bool g_bExiting = false;
 
 int GetAsyncKeyState(int key)
 {
-    DriverLog("Klawisz");
+    // DriverLog("Klawisz");
     return 0;
 }
 

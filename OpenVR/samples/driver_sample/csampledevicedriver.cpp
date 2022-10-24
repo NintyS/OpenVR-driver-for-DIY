@@ -3,8 +3,6 @@
 #include "basics.h"
 
 #include <math.h>
-
-#include <SFML/Window/Keyboard.hpp>
 #include "driverlog.h"
 
 using namespace vr;
