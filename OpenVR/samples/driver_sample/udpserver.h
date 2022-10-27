@@ -48,6 +48,7 @@ public:
     // Main loop of the server
     void run()
     {
+        DriverLog("Server started");
         while(true) {
             if(socket->receive(buffer, sizeof(buffer), received, sender, port) != sf::Socket::Done) {
                 // printf("Error receiving data");
