@@ -7,15 +7,19 @@
 
 // Devices positions and orientations
 
+struct Vector3
+{
+    float x;
+    float y;
+    float z;
+};
+
+
 struct deviceData
 {
     std::string deviceName;
-    int x;
-    int y;
-    int z;
-    int pitch;
-    int yaw;
-    int roll;
+    Vector3 postion;
+    Vector3 rotation; // pitch; yaw; roll;
     //int buttons;
 };
 
@@ -55,8 +59,38 @@ public:
             } else {
                 // printf("Received data: %s\n", buffer);
                 DriverLog("Received data: %s\n", buffer);
+
+                // Parsing the data
+                parseJson(buffer);
+
+                std::fill_n(buffer, 1024, 0); // Clearing the buffer
             }
         }
+    }
+
+    // Function that serialize JSON to struct
+    // { "HeadX": 0, "HeadY": 0, "HeadZ": 0, "RightX": 0, "RightY": 0, "RightZ": 0, "LeftX": 0, "LeftY": 0, "LeftZ": 0 }
+    std::vector<Vector3> parseJson(std::string json) 
+    {
+        json = json.substr(1, json.length() - 2); // Removing brackets
+
+        for (int i = 0; i < 3; i++)
+        {
+            Vector3 v;
+            for (int i = 0; i < 3; i++)
+            {
+                if(json.find(",") == std::string::npos) {
+                    std::string text = json.substr(0, json.length() - 1);
+                }
+                std::string text = json.substr(0, json.find(","));
+                std::string var = text.substr(text.find(":") + 1, json.find(","));
+                DriverLog("Varable: ", var);
+
+            }
+        }
+
+        return std::vector<Vector3>();
+        
     }
 
 private:
