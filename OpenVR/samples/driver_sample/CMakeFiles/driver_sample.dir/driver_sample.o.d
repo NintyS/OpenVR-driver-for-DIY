@@ -20,10 +20,9 @@ CMakeFiles/driver_sample.dir/driver_sample.o: \
  /usr/include/c++/11/bits/cxxabi_init_exception.h \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/stddef.h \
  /usr/include/c++/11/typeinfo /usr/include/c++/11/bits/hash_bytes.h \
- /usr/include/c++/11/new /usr/include/c++/11/bits/move.h \
- /usr/include/c++/11/type_traits \
- /usr/include/c++/11/bits/nested_exception.h /usr/include/c++/11/iosfwd \
- /usr/include/c++/11/bits/stringfwd.h \
+ /usr/include/c++/11/new /usr/include/c++/11/bits/nested_exception.h \
+ /usr/include/c++/11/bits/move.h /usr/include/c++/11/type_traits \
+ /usr/include/c++/11/iosfwd /usr/include/c++/11/bits/stringfwd.h \
  /usr/include/c++/11/bits/memoryfwd.h /usr/include/c++/11/bits/postypes.h \
  /usr/include/c++/11/cwchar /usr/include/wchar.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \

@@ -5,7 +5,7 @@ using namespace vr;
 EVRInitError CServerDriver_Sample::Init(vr::IVRDriverContext *pDriverContext)
 {
     VR_INIT_SERVER_DRIVER_CONTEXT(pDriverContext);
-    InitDriverLog( vr::VRDriverLog() );
+    //InitDriverLog( vr::VRDriverLog() );
 
     // Creating a new server
     m_pServer = new UpdServer();
