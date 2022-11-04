@@ -4,7 +4,8 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/usr/local/include/OpenVR"
+                "/usr/local/include/OpenVR",
+                "/home/nintyswinty/Documents/JSON/json-develop/include/"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",

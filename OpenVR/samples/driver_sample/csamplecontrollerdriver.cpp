@@ -3,7 +3,7 @@
 
 #include <math.h>
 
-#include "udpserver.h"
+//#include "udpserver.h"
 
 using namespace vr;
 
@@ -163,9 +163,9 @@ DriverPose_t CSampleControllerDriver::GetPose()
             croll = 0;
         }
 
-        cpZ = GetDeviceData(1).postion.z;
-        cpX = GetDeviceData(1).postion.x;
-        cpY = GetDeviceData(1).postion.y;
+        // cpZ = GetDeviceData(1).postion.z;
+        // cpX = GetDeviceData(1).postion.x;
+        // cpY = GetDeviceData(1).postion.y;
 
         //Change position controller1
         // if ((GetAsyncKeyState(87) & 0x8000) != 0) {
@@ -198,9 +198,9 @@ DriverPose_t CSampleControllerDriver::GetPose()
     } else {
         //Controller2
 
-        c2pZ = GetDeviceData(2).postion.z;
-        c2pX = GetDeviceData(2).postion.x;
-        c2pY = GetDeviceData(2).postion.y;
+        // c2pZ = GetDeviceData(2).postion.z;
+        // c2pX = GetDeviceData(2).postion.x;
+        // c2pY = GetDeviceData(2).postion.y;
 
         // if ((GetAsyncKeyState(73) & 0x8000) != 0) {
         //     c2pZ += -0.01;                                       //I

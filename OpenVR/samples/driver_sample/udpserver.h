@@ -4,9 +4,7 @@
 
 #include <SFML/Network.hpp>
 #include "driverlog.h"
-
-// Nlohmann's JSON library
-#include "nlohmann/json.hpp"
+#include <string>
 
 // Devices positions and orientations
 
@@ -31,15 +29,17 @@ struct deviceData
         rotation = Vector3();
     }
 
+    deviceData(std::string deviceName, Vector3 postion, Vector3 rotation) {
+        this->deviceName = deviceName;
+        this->postion = postion;
+        this->rotation = rotation;
+    }
+
     std::string deviceName;
     Vector3 postion;
     Vector3 rotation; // pitch; yaw; roll;
     //int buttons;
 };
-
-// json namespace
-using json = nlohmann::json;
-
 // Server class
 
 //Data
@@ -60,6 +60,11 @@ inline deviceData GetDeviceData(int x) {
 
     case 2:
         return LeftController;
+        break;
+
+    default:
+        DriverLog("Error: GetDeviceData() - Invalid device index");
+        return deviceData();
         break;
     }
 }
@@ -100,17 +105,45 @@ public:
                 DriverLog("Received data: %s\n", buffer);
 
                 // Parsing the data
-                // { "HeadX": 0, "HeadY": 0, "HeadZ": 0, "RightX": 0, "RightY": 0, "RightZ": 0, "LeftX": 0, "LeftY": 0, "LeftZ": 0 }
-                auto j3 = json::parse(buffer);
+                // { "HeadX": 0, "HeadY": 0, "HeadZ": 0, "RightX": 0, "RightY": 0, "RightZ": 0, "LeftX": 0, "LeftY": 0, "LeftZ": 0 } // changed from json to CSV
+                std::vector<float> data = divideString(buffer);
 
                 std::fill_n(buffer, 1024, 0); // Clearing the buffer
 
-                HMD.postion = Vector3(j3["HeadX"].get<float>(), j3["HeadY"].get<float>(), j3["HeadZ"].get<float>());
-                RightController.postion = Vector3(j3["RightX"].get<float>(), j3["RightY"].get<float>(), j3["RightZ"].get<float>());
-                LeftController.postion = Vector3(j3["LeftX"].get<float>(), j3["LeftY"].get<float>(), j3["LeftZ"].get<float>());
+                // // DriverLog("HeadX: %f", j3["HeadX"]);
+                // // DriverLog("HeadY: %f", j3["HeadY"]);
+                // // DriverLog("HeadZ: %f", j3["HeadZ"]);
 
+                if(!data.empty()) {
+                    for( auto i : data) {
+                        DriverLog("Value: %f", i);
+                    }
+
+                    HMD.postion = Vector3(data[0], data[1], data[2]);
+                    RightController.postion = Vector3(data[3], data[4], data[5]);
+                    LeftController.postion = Vector3(data[6], data[7], data[8]);
+                }
             }
         }
+    }
+
+    std::vector<float> divideString(std::string str) {
+
+        std::vector<float> dividedString;
+        std::string tempString = "";
+
+        for (int i = 0; i < str.length(); i++) {
+            if (str[i] == '|') {
+                dividedString.push_back(std::stof(tempString));
+                tempString = "";
+            }
+            else {
+                tempString += str[i];
+            }
+        }
+
+        return dividedString;
+
     }
 
 private:
