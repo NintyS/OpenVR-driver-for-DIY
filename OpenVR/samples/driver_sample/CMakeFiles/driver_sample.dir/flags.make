@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = -Ddriver_sample_EXPORTS
 
-CXX_INCLUDES = -I/home/nintyswinty/Documents/openvr-driver-for-diy/OpenVR/samples/driver_sample/../../headers
+CXX_INCLUDES = -I/home/nintyswinty/Documents/openvr-driver-for-diy/OpenVR/samples/driver_sample/../../headers -I/home/nintyswinty/Documents/JSON/json-develop/include
 
 CXX_FLAGS = -fPIC
 

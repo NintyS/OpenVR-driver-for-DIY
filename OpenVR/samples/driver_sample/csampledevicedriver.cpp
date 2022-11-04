@@ -5,6 +5,8 @@
 #include <math.h>
 #include "driverlog.h"
 
+#include "udpserver.h"
+
 using namespace vr;
 
 //Head tracking vars
@@ -234,6 +236,10 @@ vr::DriverPose_t CSampleDeviceDriver::GetPose() // This function sets postion of
     //     pitch = 0;
     //     roll = 0;
     // }
+
+    pX = GetDeviceData(0).postion.x;
+    pY = GetDeviceData(0).postion.y;
+    pZ = GetDeviceData(0).postion.z;
 
     // if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
     //    DriverLog("W");

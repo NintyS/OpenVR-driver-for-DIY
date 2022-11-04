@@ -1,4 +1,5 @@
 include_directories(../../headers)
+include_directories(/home/nintyswinty/Documents/JSON/json-develop/include)
 
 set(TARGET_NAME driver_sample)
 

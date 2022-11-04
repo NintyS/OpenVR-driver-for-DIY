@@ -27,25 +27,31 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 5,
+				"line" : 6,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 42,
+				"line" : 43,
 				"parent" : 0
 			},
 			{
 				"command" : 2,
 				"file" : 0,
-				"line" : 24,
+				"line" : 25,
 				"parent" : 0
 			},
 			{
 				"command" : 3,
 				"file" : 0,
 				"line" : 1,
+				"parent" : 0
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 2,
 				"parent" : 0
 			}
 		]
@@ -70,6 +76,10 @@
 				{
 					"backtrace" : 4,
 					"path" : "/home/nintyswinty/Documents/openvr-driver-for-diy/OpenVR/samples/driver_sample/../../headers"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/nintyswinty/Documents/JSON/json-develop/include"
 				}
 			],
 			"language" : "CXX",

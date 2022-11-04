@@ -218,7 +218,107 @@ CMakeFiles/driver_sample.dir/driver_sample.o: \
  /usr/include/SFML/Network/UdpSocket.hpp \
  /home/nintyswinty/Documents/openvr-driver-for-diy/OpenVR/samples/driver_sample/driverlog.h \
  /home/nintyswinty/Documents/openvr-driver-for-diy/OpenVR/samples/driver_sample/../../headers/openvr_driver.h \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/json.hpp \
+ /usr/include/c++/11/cstddef /usr/include/c++/11/memory \
+ /usr/include/c++/11/bits/stl_raw_storage_iter.h \
+ /usr/include/c++/11/bits/align.h /usr/include/c++/11/bit \
+ /usr/include/c++/11/bits/shared_ptr.h \
+ /usr/include/c++/11/bits/shared_ptr_base.h \
+ /usr/include/c++/11/bits/allocated_ptr.h \
+ /usr/include/c++/11/ext/concurrence.h \
+ /usr/include/c++/11/bits/shared_ptr_atomic.h \
+ /usr/include/c++/11/bits/atomic_base.h \
+ /usr/include/c++/11/bits/atomic_lockfree_defines.h \
+ /usr/include/c++/11/backward/auto_ptr.h \
+ /usr/include/c++/11/pstl/glue_memory_defs.h \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/adl_serializer.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/abi_macros.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/conversions/from_json.hpp \
+ /usr/include/c++/11/forward_list /usr/include/c++/11/bits/forward_list.h \
+ /usr/include/c++/11/bits/forward_list.tcc /usr/include/c++/11/valarray \
+ /usr/include/c++/11/cmath /usr/include/math.h \
+ /usr/include/x86_64-linux-gnu/bits/math-vector.h \
+ /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h \
+ /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h \
+ /usr/include/x86_64-linux-gnu/bits/fp-logb.h \
+ /usr/include/x86_64-linux-gnu/bits/fp-fast.h \
+ /usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h \
+ /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
+ /usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h \
+ /usr/include/x86_64-linux-gnu/bits/iscanonical.h \
+ /usr/include/c++/11/bits/specfun.h /usr/include/c++/11/tr1/gamma.tcc \
+ /usr/include/c++/11/tr1/special_function_util.h \
+ /usr/include/c++/11/tr1/bessel_function.tcc \
+ /usr/include/c++/11/tr1/beta_function.tcc \
+ /usr/include/c++/11/tr1/ell_integral.tcc \
+ /usr/include/c++/11/tr1/exp_integral.tcc \
+ /usr/include/c++/11/tr1/hypergeometric.tcc \
+ /usr/include/c++/11/tr1/legendre_function.tcc \
+ /usr/include/c++/11/tr1/modified_bessel_func.tcc \
+ /usr/include/c++/11/tr1/poly_hermite.tcc \
+ /usr/include/c++/11/tr1/poly_laguerre.tcc \
+ /usr/include/c++/11/tr1/riemann_zeta.tcc \
+ /usr/include/c++/11/bits/valarray_array.h \
+ /usr/include/c++/11/bits/valarray_array.tcc \
+ /usr/include/c++/11/bits/valarray_before.h \
+ /usr/include/c++/11/bits/slice_array.h \
+ /usr/include/c++/11/bits/valarray_after.h \
+ /usr/include/c++/11/bits/gslice.h \
+ /usr/include/c++/11/bits/gslice_array.h \
+ /usr/include/c++/11/bits/mask_array.h \
+ /usr/include/c++/11/bits/indirect_array.h \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/exceptions.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/value_t.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/macro_scope.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/meta/detected.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/meta/void_t.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/thirdparty/hedley/hedley.hpp \
+ /usr/include/c++/11/version /usr/include/c++/11/cassert \
+ /usr/include/assert.h \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/string_escape.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/input/position_t.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/meta/cpp_future.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/meta/type_traits.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/iterators/iterator_traits.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/meta/call_std/begin.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/meta/call_std/end.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/json_fwd.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/string_concat.hpp \
+ /usr/include/c++/11/cstring /usr/include/string.h /usr/include/strings.h \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/meta/identity_tag.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/meta/std_fs.hpp \
+ /usr/include/c++/11/filesystem /usr/include/c++/11/bits/fs_fwd.h \
+ /usr/include/c++/11/bits/fs_path.h /usr/include/c++/11/iomanip \
+ /usr/include/c++/11/bits/quoted_string.h /usr/include/c++/11/sstream \
+ /usr/include/c++/11/bits/sstream.tcc /usr/include/c++/11/codecvt \
+ /usr/include/c++/11/bits/fs_dir.h /usr/include/c++/11/bits/fs_ops.h \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/conversions/to_json.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/iterators/iteration_proxy.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/byte_container_with_subtype.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/hash.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/input/binary_reader.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/input/input_adapters.hpp \
+ /usr/include/c++/11/numeric /usr/include/c++/11/bits/stl_numeric.h \
+ /usr/include/c++/11/pstl/glue_numeric_defs.h \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/input/json_sax.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/input/lexer.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/meta/is_sax.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/input/parser.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/iterators/internal_iterator.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/iterators/primitive_iterator.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/iterators/iter_impl.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/iterators/json_reverse_iterator.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/json_custom_base_class.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/json_pointer.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/json_ref.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/output/binary_writer.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/output/output_adapters.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/output/serializer.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/conversions/to_chars.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/ordered_map.hpp \
+ /usr/include/c++/11/any \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/detail/macro_unscope.hpp \
+ /home/nintyswinty/Documents/JSON/json-develop/include/nlohmann/thirdparty/hedley/hedley_undef.hpp \
  /home/nintyswinty/Documents/openvr-driver-for-diy/OpenVR/samples/driver_sample/csampledevicedriver.h \
  /home/nintyswinty/Documents/openvr-driver-for-diy/OpenVR/samples/driver_sample/csamplecontrollerdriver.h \
- /home/nintyswinty/Documents/openvr-driver-for-diy/OpenVR/samples/driver_sample/cwatchdogdriver_sample.h \
- /usr/include/string.h /usr/include/strings.h
+ /home/nintyswinty/Documents/openvr-driver-for-diy/OpenVR/samples/driver_sample/cwatchdogdriver_sample.h

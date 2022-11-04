@@ -132,10 +132,9 @@ CMakeFiles/driver_sample.dir/cwatchdogdriver_sample.o: \
  /usr/include/c++/11/bits/stl_uninitialized.h \
  /usr/include/c++/11/bits/stl_vector.h \
  /usr/include/c++/11/bits/stl_bvector.h \
- /usr/include/c++/11/bits/vector.tcc \
- /home/nintyswinty/Documents/openvr-driver-for-diy/OpenVR/samples/driver_sample/driverlog.h \
- /usr/include/c++/11/thread /usr/include/c++/11/bits/std_thread.h \
- /usr/include/c++/11/exception /usr/include/c++/11/bits/exception_ptr.h \
+ /usr/include/c++/11/bits/vector.tcc /usr/include/c++/11/thread \
+ /usr/include/c++/11/bits/std_thread.h /usr/include/c++/11/exception \
+ /usr/include/c++/11/bits/exception_ptr.h \
  /usr/include/c++/11/bits/cxxabi_init_exception.h \
  /usr/include/c++/11/typeinfo /usr/include/c++/11/bits/nested_exception.h \
  /usr/include/c++/11/tuple /usr/include/c++/11/utility \

@@ -1,14 +1,21 @@
 #pragma once
-#ifndef UDPSERVER_H
-#define UDPSERVER_H
+#ifndef UDPSERVER_H_
+#define UDPSERVER_H_
 
 #include <SFML/Network.hpp>
 #include "driverlog.h"
+
+// Nlohmann's JSON library
+#include "nlohmann/json.hpp"
 
 // Devices positions and orientations
 
 struct Vector3
 {
+    Vector3() : x(0), y(0), z(0) {}
+
+    Vector3(float x, float y, float z) : x(x), y(y), z(z) {}
+
     float x;
     float y;
     float z;
@@ -17,13 +24,45 @@ struct Vector3
 
 struct deviceData
 {
+
+    deviceData() {
+        deviceName = "null";
+        postion = Vector3();
+        rotation = Vector3();
+    }
+
     std::string deviceName;
     Vector3 postion;
     Vector3 rotation; // pitch; yaw; roll;
     //int buttons;
 };
 
+// json namespace
+using json = nlohmann::json;
+
 // Server class
+
+//Data
+inline deviceData HMD;
+inline deviceData RightController;
+inline deviceData LeftController;
+
+inline deviceData GetDeviceData(int x) {
+    switch (x)
+    {
+    case 0:
+        return HMD;
+        break;
+        
+    case 1:
+        return RightController;
+        break;
+
+    case 2:
+        return LeftController;
+        break;
+    }
+}
 
 class UpdServer
 {
@@ -61,36 +100,17 @@ public:
                 DriverLog("Received data: %s\n", buffer);
 
                 // Parsing the data
-                parseJson(buffer);
+                // { "HeadX": 0, "HeadY": 0, "HeadZ": 0, "RightX": 0, "RightY": 0, "RightZ": 0, "LeftX": 0, "LeftY": 0, "LeftZ": 0 }
+                auto j3 = json::parse(buffer);
 
                 std::fill_n(buffer, 1024, 0); // Clearing the buffer
-            }
-        }
-    }
 
-    // Function that serialize JSON to struct
-    // { "HeadX": 0, "HeadY": 0, "HeadZ": 0, "RightX": 0, "RightY": 0, "RightZ": 0, "LeftX": 0, "LeftY": 0, "LeftZ": 0 }
-    std::vector<Vector3> parseJson(std::string json) 
-    {
-        json = json.substr(1, json.length() - 2); // Removing brackets
-
-        for (int i = 0; i < 3; i++)
-        {
-            Vector3 v;
-            for (int i = 0; i < 3; i++)
-            {
-                if(json.find(",") == std::string::npos) {
-                    std::string text = json.substr(0, json.length() - 1);
-                }
-                std::string text = json.substr(0, json.find(","));
-                std::string var = text.substr(text.find(":") + 1, json.find(","));
-                DriverLog("Varable: ", var);
+                HMD.postion = Vector3(j3["HeadX"].get<float>(), j3["HeadY"].get<float>(), j3["HeadZ"].get<float>());
+                RightController.postion = Vector3(j3["RightX"].get<float>(), j3["RightY"].get<float>(), j3["RightZ"].get<float>());
+                LeftController.postion = Vector3(j3["LeftX"].get<float>(), j3["LeftY"].get<float>(), j3["LeftZ"].get<float>());
 
             }
         }
-
-        return std::vector<Vector3>();
-        
     }
 
 private:
@@ -104,10 +124,6 @@ private:
     char buffer[1024];
     std::size_t received = 0;
 
-    //Data
-    deviceData HMD;
-    deviceData RightController;
-    deviceData LeftController;
 };
 
-#endif // UDPSERVER_H
+#endif // UDPSERVER_H_

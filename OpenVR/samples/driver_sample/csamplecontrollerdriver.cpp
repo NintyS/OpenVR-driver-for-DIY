@@ -3,6 +3,8 @@
 
 #include <math.h>
 
+#include "udpserver.h"
+
 using namespace vr;
 
 static double cyaw = 0, cpitch = 0, croll = 0;
@@ -161,30 +163,34 @@ DriverPose_t CSampleControllerDriver::GetPose()
             croll = 0;
         }
 
+        cpZ = GetDeviceData(1).postion.z;
+        cpX = GetDeviceData(1).postion.x;
+        cpY = GetDeviceData(1).postion.y;
+
         //Change position controller1
-        if ((GetAsyncKeyState(87) & 0x8000) != 0) {
-            cpZ += -0.01;                                       //W
-        }
-        if ((GetAsyncKeyState(83) & 0x8000) != 0) {
-            cpZ += 0.01;                                       //S
-        }
-        if ((GetAsyncKeyState(65) & 0x8000) != 0) {
-            cpX += -0.01;                                       //A
-        }
-        if ((GetAsyncKeyState(68) & 0x8000) != 0) {
-            cpX += 0.01;                                       //D
-        }
-        if ((GetAsyncKeyState(81) & 0x8000) != 0) {
-            cpY += 0.01;                                       //Q
-        }
-        if ((GetAsyncKeyState(69) & 0x8000) != 0) {
-            cpY += -0.01;                                       //E
-        }
-        if ((GetAsyncKeyState(82) & 0x8000) != 0) {
-            cpX = 0;
-            cpY = 0;
-            cpZ = 0;
-        }                                                                        //R
+        // if ((GetAsyncKeyState(87) & 0x8000) != 0) {
+        //     cpZ += -0.01;                                       //W
+        // }
+        // if ((GetAsyncKeyState(83) & 0x8000) != 0) {
+        //     cpZ += 0.01;                                       //S
+        // }
+        // if ((GetAsyncKeyState(65) & 0x8000) != 0) {
+        //     cpX += -0.01;                                       //A
+        // }
+        // if ((GetAsyncKeyState(68) & 0x8000) != 0) {
+        //     cpX += 0.01;                                       //D
+        // }
+        // if ((GetAsyncKeyState(81) & 0x8000) != 0) {
+        //     cpY += 0.01;                                       //Q
+        // }
+        // if ((GetAsyncKeyState(69) & 0x8000) != 0) {
+        //     cpY += -0.01;                                       //E
+        // }
+        // if ((GetAsyncKeyState(82) & 0x8000) != 0) {
+        //     cpX = 0;
+        //     cpY = 0;
+        //     cpZ = 0;
+        // }                                                                        //R
 
         pose.vecPosition[0] = cpX;
         pose.vecPosition[1] = cpY;
@@ -192,29 +198,33 @@ DriverPose_t CSampleControllerDriver::GetPose()
     } else {
         //Controller2
 
-        if ((GetAsyncKeyState(73) & 0x8000) != 0) {
-            c2pZ += -0.01;                                       //I
-        }
-        if ((GetAsyncKeyState(75) & 0x8000) != 0) {
-            c2pZ += 0.01;                                       //K
-        }
-        if ((GetAsyncKeyState(74) & 0x8000) != 0) {
-            c2pX += -0.01;                                       //J
-        }
-        if ((GetAsyncKeyState(76) & 0x8000) != 0) {
-            c2pX += 0.01;                                       //L
-        }
-        if ((GetAsyncKeyState(85) & 0x8000) != 0) {
-            c2pY += 0.01;                                       //U
-        }
-        if ((GetAsyncKeyState(79) & 0x8000) != 0) {
-            c2pY += -0.01;                                       //O
-        }
-        if ((GetAsyncKeyState(80) & 0x8000) != 0) {
-            c2pX = 0;
-            c2pY = 0;
-            c2pZ = 0;
-        }                                                                           //P
+        c2pZ = GetDeviceData(2).postion.z;
+        c2pX = GetDeviceData(2).postion.x;
+        c2pY = GetDeviceData(2).postion.y;
+
+        // if ((GetAsyncKeyState(73) & 0x8000) != 0) {
+        //     c2pZ += -0.01;                                       //I
+        // }
+        // if ((GetAsyncKeyState(75) & 0x8000) != 0) {
+        //     c2pZ += 0.01;                                       //K
+        // }
+        // if ((GetAsyncKeyState(74) & 0x8000) != 0) {
+        //     c2pX += -0.01;                                       //J
+        // }
+        // if ((GetAsyncKeyState(76) & 0x8000) != 0) {
+        //     c2pX += 0.01;                                       //L
+        // }
+        // if ((GetAsyncKeyState(85) & 0x8000) != 0) {
+        //     c2pY += 0.01;                                       //U
+        // }
+        // if ((GetAsyncKeyState(79) & 0x8000) != 0) {
+        //     c2pY += -0.01;                                       //O
+        // }
+        // if ((GetAsyncKeyState(80) & 0x8000) != 0) {
+        //     c2pX = 0;
+        //     c2pY = 0;
+        //     c2pZ = 0;
+        // }                                                                           //P
 
         pose.vecPosition[0] = c2pX;
         pose.vecPosition[1] = c2pY;
