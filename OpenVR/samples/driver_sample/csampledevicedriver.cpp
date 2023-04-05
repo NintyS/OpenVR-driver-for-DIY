@@ -4,19 +4,14 @@
 
 #include <math.h>
 #include "driverlog.h"
-#include "udpserver.h"
-
-//#include "udpserver.h"
 
 using namespace vr;
 
-//Head tracking vars
-static double yaw = 0, pitch = 0, roll = 0;
-static double pX = 0, pY = 0, pZ = 0;
-static double t0, t1, t2, t3, t4, t5;
 
 CSampleDeviceDriver::CSampleDeviceDriver()
 {
+    std::cout << "\033[31m CSampleDeviceDriver::CSampleDeviceDriver() Start \033[0m" << std::endl;
+
     m_unObjectId = vr::k_unTrackedDeviceIndexInvalid;
     m_ulPropertyContainer = vr::k_ulInvalidPropertyContainer;
 
@@ -46,14 +41,19 @@ CSampleDeviceDriver::CSampleDeviceDriver()
         DriverLog( "driver_null: Seconds from Vsync to Photons: %f\n", m_flSecondsFromVsyncToPhotons );
         DriverLog( "driver_null: Display Frequency: %f\n", m_flDisplayFrequency );
         DriverLog( "driver_null: IPD: %f\n", m_flIPD );*/
+
+    std::cout << "\033[31m CSampleDeviceDriver::CSampleDeviceDriver() End \033[0m" << std::endl;
 }
 
 CSampleDeviceDriver::~CSampleDeviceDriver()
 {
+    delete m_thread;
 }
 
 EVRInitError CSampleDeviceDriver::Activate(TrackedDeviceIndex_t unObjectId)
 {
+    std::cout << "\033[31m CSampleDeviceDriver::Activate() Start \033[0m" << std::endl;
+
     m_unObjectId = unObjectId;
     m_ulPropertyContainer = vr::VRProperties()->TrackedDeviceToPropertyContainer(m_unObjectId);
 
@@ -65,7 +65,7 @@ EVRInitError CSampleDeviceDriver::Activate(TrackedDeviceIndex_t unObjectId)
     vr::VRProperties()->SetFloatProperty(m_ulPropertyContainer, Prop_SecondsFromVsyncToPhotons_Float, m_flSecondsFromVsyncToPhotons);
 
     // return a constant that's not 0 (invalid) or 1 (reserved for Oculus)
-    vr::VRProperties()->SetUint64Property(m_ulPropertyContainer, Prop_CurrentUniverseId_Uint64, 2);
+    vr::VRProperties()->SetUint64Property(m_ulPropertyContainer, Prop_CurrentUniverseId_Uint64, 1);
 
     // avoid "not fullscreen" warnings from vrmonitor
     vr::VRProperties()->SetBoolProperty(m_ulPropertyContainer, Prop_IsOnDesktop_Bool, false);
@@ -110,11 +110,20 @@ EVRInitError CSampleDeviceDriver::Activate(TrackedDeviceIndex_t unObjectId)
         vr::VRProperties()->SetStringProperty(m_ulPropertyContainer, vr::Prop_NamedIconPathDeviceAlertLow_String, "{sample}/icons/headset_sample_status_ready_low.png");
     }
 
+    m_thread = new std::thread(&CSampleDeviceDriver::PositionUpdater, this);
+    m_bExiting = true;
+
+    std::cout << "\033[31m CSampleDeviceDriver::Activate() done \033[0m" << std::endl;
+
     return VRInitError_None;
 }
 
 void CSampleDeviceDriver::Deactivate()
 {
+    if(m_bExiting.exchange(false)) {
+        m_thread->join();
+    }
+
     m_unObjectId = vr::k_unTrackedDeviceIndexInvalid;
 }
 
@@ -129,11 +138,12 @@ void *CSampleDeviceDriver::GetComponent(const char *pchComponentNameAndVersion)
     }
 
     // override this to add a component to a driver
-    return NULL;
+    return nullptr;
 }
 
 void CSampleDeviceDriver::PowerOff()
 {
+
 }
 
 void CSampleDeviceDriver::DebugRequest(const char *pchRequest, char *pchResponseBuffer, uint32_t unResponseBufferSize)
@@ -210,96 +220,67 @@ vr::DriverPose_t CSampleDeviceDriver::GetPose() // This function sets postion of
     pose.qWorldFromDriverRotation = HmdQuaternion_Init(1, 0, 0, 0);
     pose.qDriverFromHeadRotation = HmdQuaternion_Init(1, 0, 0, 0);
 
-    //Simple change yaw, pitch, roll with numpad keys
-    if ((GetAsyncKeyState(VK_UP) & 0x8000) != 0) {
-        yaw += 0.01;
-    }
-    // if ((GetAsyncKeyState(VK_NUMPAD1) & 0x8000) != 0) {
-    //     yaw += -0.01;
-    // }
+    pose.vecPosition[0] = HMDPosition.x;
+    pose.vecPosition[1] = HMDPosition.y;
+    pose.vecPosition[2] = -HMDPosition.z;
 
-    if ((GetAsyncKeyState(VK_NUMPAD4) & 0x8000) != 0) {
-        pitch += 0.01;
-    }
-    // if ((GetAsyncKeyState(VK_NUMPAD6) & 0x8000) != 0) {
-    //     pitch += -0.01;
-    // }
-
-    if ((GetAsyncKeyState(VK_NUMPAD8) & 0x8000) != 0) {
-        roll += 0.01;
-    }
-    // if ((GetAsyncKeyState(VK_NUMPAD2) & 0x8000) != 0) {
-    //     roll += -0.01;
-    // }
-
-    // if ((GetAsyncKeyState(VK_NUMPAD9) & 0x8000) != 0) {
-    //     yaw = 0;
-    //     pitch = 0;
-    //     roll = 0;
-    // }
-
-    pX = GetDeviceData(0).postion.x;
-    pY = GetDeviceData(0).postion.y;
-    pZ = GetDeviceData(0).postion.z;
-
-    // if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-    //    DriverLog("W");
-    //     pZ += -0.01;
-    // }
-
-    // if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-    //     pZ += 0.01;
-    // }
-
-    // if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-    //     pX += -0.01;
-    // }
-
-    // if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-    //     pX += 0.01;
-    // }
-
-    // if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
-    //     pY += 0.01;
-    // }
-
-    // if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)) {
-    //     pY += -0.01;
-    // }
-
-    // if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z)) {
-    //     pX = 0;
-    //     pY = 0;
-    //     pZ = 0;
-    // }
-
-    pose.vecPosition[0] = pX;
-    pose.vecPosition[1] = pY;
-    pose.vecPosition[2] = pZ;
-
-    //Convert yaw, pitch, roll to quaternion
-    t0 = cos(yaw * 0.5);
-    t1 = sin(yaw * 0.5);
-    t2 = cos(roll * 0.5);
-    t3 = sin(roll * 0.5);
-    t4 = cos(pitch * 0.5);
-    t5 = sin(pitch * 0.5);
-
-    //Set head tracking rotation
-    pose.qRotation.w = t0 * t2 * t4 + t1 * t3 * t5;
-    pose.qRotation.x = t0 * t3 * t4 - t1 * t2 * t5;
-    pose.qRotation.y = t0 * t2 * t5 + t1 * t3 * t4;
-    pose.qRotation.z = t1 * t2 * t4 - t0 * t3 * t5;
+    pose.qRotation.w = HMDPosition.kata;
+    pose.qRotation.x = -HMDPosition.yaw;
+    pose.qRotation.y = -HMDPosition.pitch;
+    pose.qRotation.z = HMDPosition.roll;
 
     return pose;
 }
 
+//void CSampleDeviceDriver::Present( const vr::PresentInfo_t *pPresentInfo, uint32_t unPresentInfoSize )
+//{
+//    auto handler = pPresentInfo->backbufferTextureHandle;
+//    GLuint textureID = handler;
+//    glBindTexture(GL_TEXTURE_2D, textureID);
+//
+//    if(textureID > 0) {
+//        std::cout << "TXT Handler: " << textureID << std::endl;
+//    } else {
+//        std::cout << "Ni ma TXT" << std::endl;
+//    }
+//
+//}
+//
+//void CSampleDeviceDriver::WaitForPresent()
+//{
+//
+//}
+//
+//bool CSampleDeviceDriver::GetTimeSinceLastVsync(float *pfSecondsSinceLastVsync, uint64_t *pulFrameCounter)
+//{
+//    return true;
+//}
+
+void CSampleDeviceDriver::PositionUpdater()
+{
+    while(m_bExiting) {
+        if (m_unObjectId != vr::k_unTrackedDeviceIndexInvalid) {
+            vr::VRServerDriverHost()->TrackedDevicePoseUpdated(m_unObjectId, GetPose(), sizeof(DriverPose_t));
+        }
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
+    }
+
+}
+
 void CSampleDeviceDriver::RunFrame()
 {
+    std::cout << "\033[31m CSampleDeviceDriver::RunFrame() \033[0m" << std::endl;
+
     // In a real driver, this should happen from some pose tracking thread.
     // The RunFrame interval is unspecified and can be very irregular if some other
     // driver blocks it for some periodic task.
     if (m_unObjectId != vr::k_unTrackedDeviceIndexInvalid) {
         vr::VRServerDriverHost()->TrackedDevicePoseUpdated(m_unObjectId, GetPose(), sizeof(DriverPose_t));
     }
+}
+
+void CSampleDeviceDriver::SetPosition(Point3D &position)
+{
+    HMDPosition = position;
 }

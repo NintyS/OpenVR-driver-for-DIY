@@ -2,11 +2,18 @@
 #define CSAMPLEDEVICEDRIVER_H
 
 #include <openvr_driver.h>
+#include <iostream>
+#include "struct.h"
+#include <atomic>
+#include <thread>
+
+#include <opencv2/opencv.hpp>
+#include <GL/glut.h>
 
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-class CSampleDeviceDriver : public vr::ITrackedDeviceServerDriver, public vr::IVRDisplayComponent
+class CSampleDeviceDriver : public vr::ITrackedDeviceServerDriver, public vr::IVRDisplayComponent /*, public vr::IVRVirtualDisplay */
 {
 public:
     CSampleDeviceDriver();
@@ -17,7 +24,7 @@ public:
 
     virtual void Deactivate();
 
-    virtual void EnterStandby();
+    virtual  void EnterStandby();
 
     void *GetComponent(const char *pchComponentNameAndVersion);
 
@@ -28,9 +35,13 @@ public:
 
     virtual void GetWindowBounds(int32_t *pnX, int32_t *pnY, uint32_t *pnWidth, uint32_t *pnHeight);
 
+    // Setting visibility of image
+
     virtual bool IsDisplayOnDesktop();
 
     virtual bool IsDisplayRealDisplay();
+
+    // Setting image
 
     virtual void GetRecommendedRenderTargetSize(uint32_t *pnWidth, uint32_t *pnHeight);
 
@@ -40,7 +51,20 @@ public:
 
     virtual vr::DistortionCoordinates_t ComputeDistortion(vr::EVREye eEye, float fU, float fV);
 
+    // Getting image
+//    virtual void Present( const vr::PresentInfo_t *pPresentInfo, uint32_t unPresentInfoSize );
+//
+//    virtual void WaitForPresent();
+//
+//    virtual bool GetTimeSinceLastVsync( float *pfSecondsSinceLastVsync, uint64_t *pulFrameCounter );
+
+    // Getting & setting pose
+
     virtual vr::DriverPose_t GetPose();
+
+    void SetPosition(Point3D &position);
+
+    void PositionUpdater();
 
     void RunFrame();
 
@@ -50,8 +74,15 @@ private:
     vr::TrackedDeviceIndex_t m_unObjectId;
     vr::PropertyContainerHandle_t m_ulPropertyContainer;
 
+    vr::SharedTextureHandle_t m_syncTexture;
+
     std::string m_sSerialNumber;
     std::string m_sModelNumber;
+
+    Point3D HMDPosition;
+
+    std::thread *m_thread;
+    std::atomic<bool> m_bExiting = true;
 
     int32_t m_nWindowX;
     int32_t m_nWindowY;

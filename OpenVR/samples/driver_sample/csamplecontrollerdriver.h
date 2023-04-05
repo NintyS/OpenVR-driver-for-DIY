@@ -2,6 +2,10 @@
 #define CSAMPLECONTROLLERDRIVER_H
 
 #include <openvr_driver.h>
+#include <iostream>
+#include "struct.h"
+#include <thread>
+#include <atomic>
 
 //-----------------------------------------------------------------------------
 // Purpose:
@@ -32,6 +36,14 @@ public:
 
     virtual vr::DriverPose_t GetPose();
 
+    void PositionUpdater();
+
+    void ButtonsUpdater();
+
+    void SetPositions(Point3D &controller, Point3D &hmd);
+
+    void SetButtons(Buttons &buttons);
+
     void RunFrame();
 
     void ProcessEvent(const vr::VREvent_t &vrEvent);
@@ -47,9 +59,19 @@ private:
     //vr::VRInputComponentHandle_t m_compC;
     vr::VRInputComponentHandle_t m_compHaptic;
 
-    vr::VRInputComponentHandle_t HButtons[4], HAnalog[3];
+    vr::VRInputComponentHandle_t HButtons[7], HAnalog[3];
     //std::string m_sSerialNumber;
     //std::string m_sModelNumber;
+
+    Point3D ControllerPosition;
+    Point3D HMDPosition;
+
+    Buttons ControllerButtons;
+
+    std::thread *m_pPositionUpdaterThread;
+    std::thread *m_pButtonsUpdaterThread;
+    std::atomic<bool> m_bShowController;
+
 };
 
 #endif // CSAMPLECONTROLLERDRIVER_H
