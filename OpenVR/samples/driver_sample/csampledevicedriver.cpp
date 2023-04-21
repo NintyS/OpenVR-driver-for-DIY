@@ -25,14 +25,23 @@ CSampleDeviceDriver::CSampleDeviceDriver()
     vr::VRSettings()->GetString(k_pch_Sample_Section, k_pch_Sample_ModelNumber_String, buf, sizeof(buf));
     m_sModelNumber = buf;
 
-    m_nWindowX = vr::VRSettings()->GetInt32(k_pch_Sample_Section, k_pch_Sample_WindowX_Int32);
-    m_nWindowY = vr::VRSettings()->GetInt32(k_pch_Sample_Section, k_pch_Sample_WindowY_Int32);
-    m_nWindowWidth = vr::VRSettings()->GetInt32(k_pch_Sample_Section, k_pch_Sample_WindowWidth_Int32);
-    m_nWindowHeight = vr::VRSettings()->GetInt32(k_pch_Sample_Section, k_pch_Sample_WindowHeight_Int32);
-    m_nRenderWidth = vr::VRSettings()->GetInt32(k_pch_Sample_Section, k_pch_Sample_RenderWidth_Int32);
-    m_nRenderHeight = vr::VRSettings()->GetInt32(k_pch_Sample_Section, k_pch_Sample_RenderHeight_Int32);
+//    m_nWindowX = vr::VRSettings()->GetInt32(k_pch_Sample_Section, k_pch_Sample_WindowX_Int32);
+//    m_nWindowY = vr::VRSettings()->GetInt32(k_pch_Sample_Section, k_pch_Sample_WindowY_Int32);
+//    m_nWindowWidth = vr::VRSettings()->GetInt32(k_pch_Sample_Section, k_pch_Sample_WindowWidth_Int32);
+//    m_nWindowHeight = vr::VRSettings()->GetInt32(k_pch_Sample_Section, k_pch_Sample_WindowHeight_Int32);
+//    m_nRenderWidth = vr::VRSettings()->GetInt32(k_pch_Sample_Section, k_pch_Sample_RenderWidth_Int32);
+//    m_nRenderHeight = vr::VRSettings()->GetInt32(k_pch_Sample_Section, k_pch_Sample_RenderHeight_Int32);
     m_flSecondsFromVsyncToPhotons = vr::VRSettings()->GetFloat(k_pch_Sample_Section, k_pch_Sample_SecondsFromVsyncToPhotons_Float);
-    m_flDisplayFrequency = vr::VRSettings()->GetFloat(k_pch_Sample_Section, k_pch_Sample_DisplayFrequency_Float);
+//    m_flDisplayFrequency = vr::VRSettings()->GetFloat(k_pch_Sample_Section, k_pch_Sample_DisplayFrequency_Float);
+
+    m_nWindowX = 0;
+    m_nWindowY = 0;
+    m_nWindowWidth = 1920;
+    m_nWindowHeight = 1080;
+    m_nRenderWidth = 1920;
+    m_nRenderHeight = 1080;
+
+    m_flDisplayFrequency = 120;
 
     /*DriverLog( "driver_null: Serial Number: %s\n", m_sSerialNumber.c_str() );
         DriverLog( "driver_null: Model Number: %s\n", m_sModelNumber.c_str() );
@@ -48,6 +57,8 @@ CSampleDeviceDriver::CSampleDeviceDriver()
 CSampleDeviceDriver::~CSampleDeviceDriver()
 {
     delete m_thread;
+    delete m_threadImageChecking;
+//    delete m_threadDisplaying;
 }
 
 EVRInitError CSampleDeviceDriver::Activate(TrackedDeviceIndex_t unObjectId)
@@ -111,7 +122,13 @@ EVRInitError CSampleDeviceDriver::Activate(TrackedDeviceIndex_t unObjectId)
     }
 
     m_thread = new std::thread(&CSampleDeviceDriver::PositionUpdater, this);
+    m_threadImageChecking = new std::thread(&CSampleDeviceDriver::GetImage, this);
+//    m_threadDisplaying = new std::thread(&CSampleDeviceDriver::DisplayImage, this);
     m_bExiting = true;
+
+    m_thread->detach();
+    m_threadImageChecking->detach();
+//    m_threadDisplaying->detach();
 
     std::cout << "\033[31m CSampleDeviceDriver::Activate() done \033[0m" << std::endl;
 
@@ -122,6 +139,8 @@ void CSampleDeviceDriver::Deactivate()
 {
     if(m_bExiting.exchange(false)) {
         m_thread->join();
+        m_threadImageChecking->join();
+//        m_threadDisplaying->join();
     }
 
     m_unObjectId = vr::k_unTrackedDeviceIndexInvalid;
@@ -133,11 +152,18 @@ void CSampleDeviceDriver::EnterStandby()
 
 void *CSampleDeviceDriver::GetComponent(const char *pchComponentNameAndVersion)
 {
-    if (!_stricmp(pchComponentNameAndVersion, vr::IVRDisplayComponent_Version)) {
-        return (vr::IVRDisplayComponent *)this;
+    if (strcmp(pchComponentNameAndVersion, vr::IVRDisplayComponent_Version) == 0)
+    {
+        return static_cast<vr::IVRDisplayComponent *>(this);
     }
 
-    // override this to add a component to a driver
+//    if (strcmp(pchComponentNameAndVersion, vr::IVRVirtualDisplay_Version) == 0)
+//    {
+//        return static_cast<vr::IVRVirtualDisplay *>(this);
+//    }
+
+    // Obsługa innych interfejsów
+
     return nullptr;
 }
 
@@ -163,7 +189,7 @@ void CSampleDeviceDriver::GetWindowBounds(int32_t *pnX, int32_t *pnY, uint32_t *
 
 bool CSampleDeviceDriver::IsDisplayOnDesktop()
 {
-    return true;
+    return false;
 }
 
 bool CSampleDeviceDriver::IsDisplayRealDisplay()
@@ -232,29 +258,22 @@ vr::DriverPose_t CSampleDeviceDriver::GetPose() // This function sets postion of
     return pose;
 }
 
-//void CSampleDeviceDriver::Present( const vr::PresentInfo_t *pPresentInfo, uint32_t unPresentInfoSize )
-//{
-//    auto handler = pPresentInfo->backbufferTextureHandle;
-//    GLuint textureID = handler;
-//    glBindTexture(GL_TEXTURE_2D, textureID);
-//
-//    if(textureID > 0) {
-//        std::cout << "TXT Handler: " << textureID << std::endl;
-//    } else {
-//        std::cout << "Ni ma TXT" << std::endl;
-//    }
-//
-//}
-//
-//void CSampleDeviceDriver::WaitForPresent()
-//{
-//
-//}
-//
-//bool CSampleDeviceDriver::GetTimeSinceLastVsync(float *pfSecondsSinceLastVsync, uint64_t *pulFrameCounter)
-//{
-//    return true;
-//}
+void CSampleDeviceDriver::Present( const vr::PresentInfo_t *pPresentInfo, uint32_t unPresentInfoSize )
+{
+    // red text in srd::cout
+    std::cout << "\033[31m Present output: " << pPresentInfo->backbufferTextureHandle << " \033[0m" << std::endl;
+
+}
+
+void CSampleDeviceDriver::WaitForPresent()
+{
+
+}
+
+bool CSampleDeviceDriver::GetTimeSinceLastVsync(float *pfSecondsSinceLastVsync, uint64_t *pulFrameCounter)
+{
+    return true;
+}
 
 void CSampleDeviceDriver::PositionUpdater()
 {
@@ -270,17 +289,79 @@ void CSampleDeviceDriver::PositionUpdater()
 
 void CSampleDeviceDriver::RunFrame()
 {
-    std::cout << "\033[31m CSampleDeviceDriver::RunFrame() \033[0m" << std::endl;
+//    std::cout << "\033[31m CSampleDeviceDriver::RunFrame() \033[0m" << std::endl;
 
     // In a real driver, this should happen from some pose tracking thread.
     // The RunFrame interval is unspecified and can be very irregular if some other
     // driver blocks it for some periodic task.
-    if (m_unObjectId != vr::k_unTrackedDeviceIndexInvalid) {
-        vr::VRServerDriverHost()->TrackedDevicePoseUpdated(m_unObjectId, GetPose(), sizeof(DriverPose_t));
-    }
+//    if (m_unObjectId != vr::k_unTrackedDeviceIndexInvalid) {
+//        vr::VRServerDriverHost()->TrackedDevicePoseUpdated(m_unObjectId, GetPose(), sizeof(DriverPose_t));
+//    }
 }
 
 void CSampleDeviceDriver::SetPosition(Point3D &position)
 {
     HMDPosition = position;
+}
+
+void CSampleDeviceDriver::GetImage() {
+    Display* display = XOpenDisplay(nullptr);
+    Window rootWindow = DefaultRootWindow(display);
+    XWindowAttributes attributes;
+    XGetWindowAttributes(display, rootWindow, &attributes);
+    cv::Mat mat(attributes.height,
+                attributes.width,
+                CV_8UC3);
+    while(m_bExiting) {
+        XImage *image = XGetImage(display,
+                                  rootWindow,
+                                  0,
+                                  0,
+                                  attributes.width,
+                                  attributes.height,
+                                  AllPlanes,
+                                  ZPixmap);
+        cv::Mat raw_mat(image->height,
+                        image->width,
+                        CV_8UC4,
+                        image->data,
+                        image->bytes_per_line);
+        cv::cvtColor(raw_mat, mat, cv::COLOR_RGBA2RGB);
+        XDestroyImage(image);
+        image = nullptr;
+        cv::Rect region(mat.cols / 2, 0, mat.cols / 2, mat.rows);
+        cv::Mat cropped = mat(region);
+        if(cropped.empty()) {
+            std::cout << "cropped is empty" << std::endl;
+        } else {
+            std::cout << "cropped is not empty" << std::endl;
+            if(m_matImage.data == cropped.data) {
+                std::cout << "Equal" << std::endl;
+                raw_mat.release();
+                cropped.release();
+                mat.release();
+                continue;
+            } else {
+                std::cout << "NewFrame" << std::endl;
+                m_matImage = cropped.clone();
+                raw_mat.release();
+                cropped.release();
+                mat.release();
+            }
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
+    }
+    mat.release();
+    rootWindow = 0;
+    XCloseDisplay(display);
+    display = nullptr;
+}
+
+cv::Mat CSampleDeviceDriver::GetEyeView() {
+    if(m_matImage.empty()) {
+        std::cout << "m_matImage is empty" << std::endl;
+        return {};
+    }
+
+    return m_matImage;
 }

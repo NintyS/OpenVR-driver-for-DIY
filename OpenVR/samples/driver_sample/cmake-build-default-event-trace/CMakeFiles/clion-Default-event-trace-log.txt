@@ -1,0 +1,2 @@
+Cannot generate 'Default-event-trace' into /home/nintys/Desktop/OVR/OpenVR-driver-for-DIY/OpenVR/samples/driver_sample/cmake-build-default-event-trace
+CMakeCache.txt is found in the project dir, only in-source generation will be performed.

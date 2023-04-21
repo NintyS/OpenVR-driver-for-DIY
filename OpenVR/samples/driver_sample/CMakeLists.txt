@@ -1,7 +1,15 @@
+cmake_minimum_required(VERSION 3.24)
+
+project(driver_sample)
+
 include_directories(../../headers)
-include_directories(/home/nintyswinty/Documents/JSON/json-develop/include)
+include_directories(/usr/local/include)
 
 set(TARGET_NAME driver_sample)
+
+find_package(OpenCV REQUIRED)
+find_package(OpenGL REQUIRED)
+find_package(GLUT REQUIRED)
 
 add_library(${TARGET_NAME} MODULE
   basics.cpp
@@ -17,8 +25,7 @@ add_library(${TARGET_NAME} MODULE
   csamplecontrollerdriver.h
   cwatchdogdriver_sample.cpp
   cwatchdogdriver_sample.h
-  udpserver.h
-)
+  struct.h)
 
 SET_TARGET_PROPERTIES(${TARGET_NAME} PROPERTIES PREFIX "")
 
@@ -26,6 +33,12 @@ target_link_libraries(${TARGET_NAME}
   ${OPENVR_LIBRARIES}
   ${CMAKE_DL_LIBS}
   -lsfml-network
+  -lsfml-system
+  -lsfml-window
+  opencv_core opencv_imgproc opencv_video opencv_imgcodecs ${EXTERNAL_LIBS}
+  ${OPENGL_LIBRARIES}
+  ${GLUT_LIBRARY}
+  -lX11
 )
 
 if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
@@ -46,3 +59,4 @@ install(TARGETS ${TARGET_NAME}
 )
 
 install(FILES default.vrsettings DESTINATION drivers/sample/resources/settings)
+install(FILES default.vrdrivermanifest DESTINATION drivers/sample)

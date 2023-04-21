@@ -1,0 +1,24 @@
+The following OPTIONAL packages have been found:
+
+ * Qt6CoreTools (required version >= 6.3.1)
+ * Qt6Network
+
+-- The following REQUIRED packages have been found:
+
+ * Qt6
+The following OPTIONAL packages have been found:
+
+ * Qt6CoreTools (required version >= 6.3.1)
+ * Qt6Network
+
+-- The following REQUIRED packages have been found:
+
+ * Qt6
+ * OpenCV
+ * OpenGL
+ * GLUT
+The following REQUIRED packages have been found:
+
+ * OpenCV
+ * OpenGL
+ * GLUT

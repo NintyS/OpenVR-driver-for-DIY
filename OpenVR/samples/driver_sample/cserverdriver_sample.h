@@ -11,10 +11,16 @@
 #include <openvr_driver.h>
 #include <nlohmann/json.hpp>
 #include "csampledevicedriver.h"
+//#include "csampledisplaydevice.h"
 #include "csamplecontrollerdriver.h"
 
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Network.hpp>
+
+#include <opencv2/core.hpp>
+#include <opencv2/opencv.hpp>
+#include <opencv2/imgcodecs.hpp>
+
 
 using json = nlohmann::json;
 
@@ -53,6 +59,8 @@ public:
 
     std::string createJSON(std::map<std::string, std::string> &values);
 
+
+
     void GetImage();
 
 private:
@@ -64,14 +72,19 @@ private:
     sf::UdpSocket* receiveSocket;
     sf::UdpSocket* sendEventsSocket;
     sf::UdpSocket* sendImageSocket;
-    unsigned short port = 50153;
+    unsigned short portOne = 50153;
+    unsigned short portTwo = 50154;
+    unsigned short portThree = 50155;
 
     // Sender
     sf::IpAddress sender; // Ip of the sender to send the data
+    std::atomic<sf::IpAddress> receiver;
+
+    cv::Mat image;
 
     // Threads
     std::thread *MainThread; // Main thread of the server
-    std::thread *ReceiveThread; // Receive a HMD and controllers position.
+    std::thread *ReceiveThread; // Receive HMD and controllers position.
     std::thread *SendEventsThread; // Send events to the client. (Haptic events, etc.)
     std::thread *SendImageThread; // Send the image to the client.
 
@@ -82,13 +95,14 @@ private:
         std::atomic<bool> SendImageThreadRunning = true;
 
     // Content
+
     char positionBuffer[2048];
     std::size_t p_received = 0;
 
-    char eventsBuffer[1024];
+//    char eventsBuffer[1024];
 //    std::size_t e_received = 0;
-
-    char imageBuffer[1024];
+//
+//    char imageBuffer[5120];
 //    std::size_t i_received = 0;
 
     // Devices

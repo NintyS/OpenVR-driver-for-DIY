@@ -1,0 +1,4 @@
+/snap/clion/234/bin/cmake/linux/x64/bin/cmake -DCMAKE_MAKE_PROGRAM=/snap/clion/234/bin/ninja/linux/x64/ninja -G Ninja -S /home/nintys/Desktop/OVR/OpenVR-driver-for-DIY/OpenVR/samples/driver_sample -B /home/nintys/Desktop/OVR/OpenVR-driver-for-DIY/OpenVR/samples/driver_sample
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/nintys/Desktop/OVR/OpenVR-driver-for-DIY/OpenVR/samples/driver_sample

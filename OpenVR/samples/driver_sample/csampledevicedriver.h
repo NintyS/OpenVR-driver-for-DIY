@@ -8,12 +8,19 @@
 #include <thread>
 
 #include <opencv2/opencv.hpp>
-#include <GL/glut.h>
+
+#include <X11/Xutil.h>
+#include <X11/Xlib.h>
+
+#undef None
+#undef Status
+#undef Response
+#undef BadRequest
 
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
-class CSampleDeviceDriver : public vr::ITrackedDeviceServerDriver, public vr::IVRDisplayComponent /*, public vr::IVRVirtualDisplay */
+class CSampleDeviceDriver : public vr::ITrackedDeviceServerDriver, public vr::IVRDisplayComponent, public vr::IVRVirtualDisplay
 {
 public:
     CSampleDeviceDriver();
@@ -52,11 +59,11 @@ public:
     virtual vr::DistortionCoordinates_t ComputeDistortion(vr::EVREye eEye, float fU, float fV);
 
     // Getting image
-//    virtual void Present( const vr::PresentInfo_t *pPresentInfo, uint32_t unPresentInfoSize );
-//
-//    virtual void WaitForPresent();
-//
-//    virtual bool GetTimeSinceLastVsync( float *pfSecondsSinceLastVsync, uint64_t *pulFrameCounter );
+    virtual void Present( const vr::PresentInfo_t *pPresentInfo, uint32_t unPresentInfoSize );
+
+    virtual void WaitForPresent();
+
+    virtual bool GetTimeSinceLastVsync( float *pfSecondsSinceLastVsync, uint64_t *pulFrameCounter );
 
     // Getting & setting pose
 
@@ -70,18 +77,25 @@ public:
 
     std::string GetSerialNumber() const { return m_sSerialNumber; }
 
+    cv::Mat GetEyeView();
+
+    void GetImage();
+//
+//    void DisplayImage();
 private:
     vr::TrackedDeviceIndex_t m_unObjectId;
     vr::PropertyContainerHandle_t m_ulPropertyContainer;
 
-    vr::SharedTextureHandle_t m_syncTexture;
-
     std::string m_sSerialNumber;
     std::string m_sModelNumber;
+
+    cv::Mat m_matImage;
 
     Point3D HMDPosition;
 
     std::thread *m_thread;
+    std::thread *m_threadImageChecking;
+//    std::thread *m_threadDisplaying;
     std::atomic<bool> m_bExiting = true;
 
     int32_t m_nWindowX;

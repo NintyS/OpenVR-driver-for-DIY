@@ -1,0 +1,10 @@
+# ninja log v5
+2	389	1680613558993979632	CMakeFiles/driver_sample.dir/cwatchdogdriver_sample.cpp.o	8bdb70e8c1e8ca1d
+3811	3897	1680613562501931019	driver_sample.so	56a1510bd762a5f7
+1	356	1680613558961980076	CMakeFiles/driver_sample.dir/driverlog.cpp.o	9e8beac843a6e200
+0	72	1680976511061424806	build.ninja	d32d20e6aef6c6de
+2	583	1680680110122424065	CMakeFiles/driver_sample.dir/csamplecontrollerdriver.cpp.o	bf79efc6da4fb45f
+0	268	1680613558873981295	CMakeFiles/driver_sample.dir/basics.cpp.o	e91606ded8d5d611
+1	2026	1680613560629956960	CMakeFiles/driver_sample.dir/csampledevicedriver.cpp.o	328c9de3419b6864
+1	2768	1680613561373946650	CMakeFiles/driver_sample.dir/driver_sample.cpp.o	5759a7ed9abe7820
+1	3811	1680613562413932238	CMakeFiles/driver_sample.dir/cserverdriver_sample.cpp.o	d0abc81219167d9e

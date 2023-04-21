@@ -20,29 +20,33 @@ EVRInitError CServerDriver_Sample::Init(vr::IVRDriverContext *pDriverContext) {
     vr::VRServerDriverHost()->TrackedDeviceAdded(m_pController2->GetSerialNumber().c_str(),
                                                  vr::TrackedDeviceClass_Controller, m_pController2);
 
+//    m_pNullDisplayLatest = new CSampleDisplayDevice();
+//    vr::VRServerDriverHost()->TrackedDeviceAdded(std::string("VirtualDisplay").c_str(),
+//                                                 vr::TrackedDeviceClass_DisplayRedirect, m_pNullDisplayLatest);
+
     std::cout << "\033[31m" << "ServerDriver_Sample::Init" << "\033[0m" << std::endl;
 
     try {
         receiveSocket = new sf::UdpSocket();
-        if (receiveSocket->bind(port) != sf::Socket::Done) {
+        if (!receiveSocket->bind(50153)) {
             std::cout << "Error binding socket - receiveSocket" << std::endl;
         } else {
             std::cout << "Socket binded - receiveSocket" << std::endl;
         }
 
         sendEventsSocket = new sf::UdpSocket();
-        if (sendEventsSocket->bind(port + 1) != sf::Socket::Done) {
-            std::cout << "Error binding socket - sendEventsSocket" << std::endl;
-        } else {
-            std::cout << "Socket binded - sendEventsSocket" << std::endl;
-        }
-
+//        if (!sendEventsSocket->bind(50154)) {
+//            std::cout << "Error binding socket - sendEventsSocket" << std::endl;
+//        } else {
+//            std::cout << "Socket binded - sendEventsSocket" << std::endl;
+//        }
+//
         sendImageSocket = new sf::UdpSocket();
-        if (sendImageSocket->bind(port + 2) != sf::Socket::Done) {
-            std::cout << "Error binding socket - sendImageSocket" << std::endl;
-        } else {
-            std::cout << "Socket binded - sendImageSocket" << std::endl;
-        }
+//        if (!sendImageSocket->bind(50155)) {
+//            std::cout << "Error binding socket - sendImageSocket" << std::endl;
+//        } else {
+//            std::cout << "Socket binded - sendImageSocket" << std::endl;
+//        }
 
     } catch (std::exception &e) {
         std::cout << "Error creating sockets: " << e.what() << std::endl;
@@ -51,11 +55,11 @@ EVRInitError CServerDriver_Sample::Init(vr::IVRDriverContext *pDriverContext) {
     try {
         ReceiveThread = new std::thread(&CServerDriver_Sample::receive, this);
 //        SendEventsThread = new std::thread(&CServerDriver_Sample::sendEvents, this);
-//        SendImageThread = new std::thread(&CServerDriver_Sample::sendImage, this);
+        SendImageThread = new std::thread(&CServerDriver_Sample::sendImage, this);
 
         ReceiveThread->detach();
 //        SendEventsThread->detach();
-//        SendImageThread->detach();
+        SendImageThread->detach();
 
     } catch (std::exception &e) {
         std::cout << "Error creating threads: " << e.what() << std::endl;
@@ -161,47 +165,171 @@ void CServerDriver_Sample::RunFrame()
 }
 
 void CServerDriver_Sample::receive() {
-    while(ReceiveThreadRunning) {
-        if(receiveSocket->receive(positionBuffer, sizeof(positionBuffer), p_received, sender, port) != sf::Socket::Done) {
-            std::cout << "Error receiving data" << std::endl;
-        } else {
-            std::cout << "Received data" << std::endl;
-            std::cout << "Received data: " << positionBuffer << std::endl;
+    try {
+        while (ReceiveThreadRunning) {
+            if (receiveSocket->receive(positionBuffer, sizeof(positionBuffer), p_received, sender, portOne) !=
+                sf::Socket::Done) {
+                std::cout << "Error receiving data" << std::endl;
+            } else {
+                std::cout << "Sender - receive: " << sender << std::endl;
+                if(sender.toString() != "0.0.0.0") {
+                    receiver = sender;
+                    std::cout << " >>> Receiver: SAVED" << std::endl;
+                } else {
+                    std::cout << " >>> Receiver: NOT-SAVED" << std::endl;
+                }
 
-            std::string str = "";
+                std::cout << "Received data, on port: " << portOne << std::endl;
+                std::cout << "Received data: " << positionBuffer << std::endl;
 
-            for (auto &s : positionBuffer) {
-                str += s;
+                std::string str = "";
+
+                for (auto &s: positionBuffer) {
+                    str += s;
+                }
+
+                unJSON(str);
+
+                //clear positionBuffer
+                for (auto &s: positionBuffer) {
+                    s = 0;
+                }
+                std::cout << "HMD: X: " << getHMDPosition().x << " Y: " << getHMDPosition().y << " Z: "
+                          << getHMDPosition().z << std::endl;
+                std::this_thread::sleep_for(std::chrono::milliseconds(5));
             }
-
-            unJSON(str);
-
-            //clear positionBuffer
-            for (auto &s : positionBuffer) {
-                s = 0;
-            }
-//            std::cout << "HMD: X: " << getHMDPosition().x << " Y: " << getHMDPosition().y << " Z: " << getHMDPosition().z << std::endl;
         }
+    } catch (std::exception &e) {
+        std::cout << "Error in receive: " << e.what() << std::endl;
     }
 }
 
-void CServerDriver_Sample::sendEvents() {
-    while(SendEventsThreadRunning) {
-        if(sendEventsSocket->send(eventsBuffer, sizeof(eventsBuffer), sender, port+1) != sf::Socket::Done) {
-            std::cout << "Error sending data" << std::endl;
-        } else {
-            std::cout << "Sent data" << std::endl;
-        }
-    }
-}
+//void CServerDriver_Sample::sendEvents() {
+//    try {
+//        while (SendEventsThreadRunning) {
+//            if (sendEventsSocket->send(eventsBuffer, sizeof(eventsBuffer), sender, portTwo) != sf::Socket::Done) {
+//                std::cout << "Error sending data" << std::endl;
+//            } else {
+//                std::cout << "Sent data" << std::endl;
+//            }
+//        }
+//    } catch (std::exception &e) {
+//        std::cout << "Error in sendEvents: " << e.what() << std::endl;
+//    }
+//}
 
 void CServerDriver_Sample::sendImage() {
-    while(SendImageThreadRunning) {
-        if(sendImageSocket->send(imageBuffer, sizeof(imageBuffer), sender, port+2) != sf::Socket::Done) {
-            std::cout << "Error sending data" << std::endl;
-        } else {
-            std::cout << "Sent data" << std::endl;
+    try {
+
+        sf::IpAddress sendback;
+
+        while (sendback.toString() == "0.0.0.0") {
+            if (sendback.toString() != "0.0.0.0") {
+                std::cout << "Fetched" << std::endl;
+                break;
+
+            }
+
+            if (sendback.toString() == "0.0.0.0") {
+                std::cout << "Not fetched" << std::endl;
+                std::cout << "Receiver: " << receiver << std::endl;
+                sendback = receiver;
+                std::this_thread::sleep_for(std::chrono::milliseconds(5));
+                continue;
+            }
         }
+
+        while (SendImageThreadRunning) {
+
+            auto data = m_pNullHmdLatest->GetEyeView();
+            if (data.empty()) {
+                std::cout << "Data is null" << std::endl;
+                std::this_thread::sleep_for(std::chrono::milliseconds(1));
+                continue;
+            }
+
+            if(data.data == image.data) {
+                continue;
+            }
+
+            std::vector<uchar> imageBuf;
+
+            cv::imencode(".jpg", data, imageBuf);
+
+            std::cout << imageBuf.size() << std::endl;
+
+            const int buffer_size = 5120;  // Size of each buffer in bytes
+            char buffer[buffer_size];
+            int buffer_idx = 0;  // Current position in buffer
+
+            buffer[0] = '<';
+            buffer[1] = 'i';
+            buffer[2] = 'm';
+            buffer[3] = 'g';
+            buffer[4] = '>';
+            buffer_idx = 5;
+
+            int timeOfSleep = 1;
+
+            int packets_sended = 0;
+
+            for (size_t i = 0; i < imageBuf.size(); ++i) {
+                // Copy data to buffer
+                buffer[buffer_idx++] = imageBuf[i];
+
+                if (buffer_idx == buffer_size) {
+                    // Buffer is full, send it over network
+                    if (sendImageSocket->send(buffer, 5120, receiver, 50155) != sf::Socket::Done) {
+                        std::cout << "Error sending packet" << std::endl;
+                    } else {
+
+                        std::memset(buffer, 0, buffer_size);
+                        // Reset buffer index
+                        buffer_idx = 0;
+
+                        packets_sended++;
+                        std::cout << "Packets sended: " << packets_sended << std::endl;
+                        std::this_thread::sleep_for(std::chrono::milliseconds(timeOfSleep));
+                    }
+                }
+            }
+
+            // Send the remaining data in the buffer (if any)
+            if (buffer_idx > 0) {
+                if (sendImageSocket->send(buffer, buffer_idx, receiver, 50155) != sf::Socket::Done) {
+                    std::cout << "Error sending packet" << std::endl;
+                } else {
+                    packets_sended++;
+                    std::cout << "Packets sended: " << packets_sended << std::endl;
+                    std::this_thread::sleep_for(std::chrono::milliseconds(timeOfSleep));
+                }
+                std::memset(buffer, 0, buffer_size);
+                buffer_idx = 0;
+            }
+
+            buffer[0] = '<';
+            buffer[1] = '/';
+            buffer[2] = 'i';
+            buffer[3] = 'm';
+            buffer[4] = 'g';
+            buffer[5] = '>';
+            if (sendImageSocket->send(buffer, 5120, receiver, 50155) != sf::Socket::Done) {
+                std::cout << "Error sending packet" << std::endl;
+            } else {
+                packets_sended++;
+                std::cout << "Packets sended: " << packets_sended << std::endl;
+                std::this_thread::sleep_for(std::chrono::milliseconds(timeOfSleep));
+            }
+            std::memset(buffer, 0, buffer_size);
+
+            data = image;
+            data.release();
+
+//            data = nullptr;
+            std::this_thread::sleep_for(std::chrono::milliseconds(5));
+        }
+    } catch (std::exception &e) {
+        std::cout << "Error in sendImage: " << e.what() << std::endl;
     }
 }
 
